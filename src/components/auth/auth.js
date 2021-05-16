@@ -8,9 +8,9 @@ import { isLoggedIn as _isLoggedIn } from "../../store/actions/auth.actions";
 import { error } from "../../store/actions/error.actions";
 
 export const Auth = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  let isSending = false;
+  let [email, setEmail] = useState("");
+  let [password, setPassword] = useState("");
+  let [sending, setSending] = useState(false);
 
   const authReducer = useSelector((state) => state.authReducer);
   const errorReducer = useSelector((state) => state.errorReducer);
@@ -35,15 +35,20 @@ export const Auth = () => {
       return;
     }
 
+    setSending(true);
+
     userService
       .auth(email, password)
       .then((data) => {
         //Redirect to all images
+        setSending(false);
+
         dispatch(_isLoggedIn(true));
         history.push("/");
       })
       .catch((err) => {
         console.log(err);
+        setSending(false);
         dispatch(error(err));
       });
   };
@@ -75,12 +80,16 @@ export const Auth = () => {
             />
           </Form.Group>
 
-          <Button variant="primary" type="submit" disabled={isSending}>
-            Submit
-          </Button>
-        </Form>
+          <div className="d-flex">
+            <Button variant="primary" type="submit" disabled={sending}>
+              Submit
+            </Button>
 
-        <Spinner animation="border" variant="primary" hidden={!isSending} />
+            {sending ? (
+              <Spinner className="ml-5" animation="border" variant="primary" />
+            ) : null}
+          </div>
+        </Form>
       </div>
     </div>
   );
