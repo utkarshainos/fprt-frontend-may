@@ -6,10 +6,11 @@ const initialState = {
 
 const authReducer = (state = initialState, action) => {
   switch (action.type) {
-    case "Is logged in": {
-      state.isLoggedIn = action.payload;
-      return state;
-    }
+    case "Is logged in":
+      return {
+        ...state,
+        isLoggedIn: action.payload,
+      };
 
     default:
       return state;
