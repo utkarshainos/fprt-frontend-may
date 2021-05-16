@@ -4,12 +4,12 @@ import { Form, Button, Spinner } from "react-bootstrap";
 import userService from "../../services/user.service.js";
 import routeService from "../../services/route.service";
 import { useHistory } from "react-router-dom";
+import { auth$ } from "../../services/observables";
 
 export const Auth = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isSending, setIsSending] = useState(false);
-
   const history = useHistory();
 
   const onFormSubmit = (e) => {
@@ -24,6 +24,7 @@ export const Auth = () => {
       .auth(email, password)
       .then((data) => {
         //Redirect to all images
+        auth$.next(true);
         history.push("/");
         setIsSending(false);
       })

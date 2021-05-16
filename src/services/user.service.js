@@ -1,4 +1,8 @@
+import { Subject } from "rxjs";
+
 const service = {};
+
+const auth$ = new Subject();
 
 //Auth
 service.auth = (email, password) =>

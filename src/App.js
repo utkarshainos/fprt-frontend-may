@@ -1,6 +1,6 @@
 import "./App.css";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { Login } from "./components/login/login";
 import { Signup } from "./components/signup/signup";
@@ -9,18 +9,19 @@ import { PrivateImages } from "./components/private-images/private-images";
 import { ProtectedRoute } from "./components/ProtectedRoute/protected-route";
 import userService from "./services/user.service";
 import { useHistory } from "react-router-dom";
+import { auth$ } from "./services/observables";
 
 function App() {
-  var isLoggedIn = userService.isLoggedIn();
+  let [isLoggedIn, setIsLoggedIn] = useState(userService.isLoggedIn());
   const history = useHistory();
 
-  useEffect(() => {
-    setTimeout(() => {
-      isLoggedIn = userService.isLoggedIn();
+  auth$.subscribe((auth) => {
+    setIsLoggedIn = auth;
 
-      console.log(isLoggedIn);
-    }, 2000);
+    console.log(auth);
   });
+
+  useEffect(() => {});
 
   const logout = () => {
     userService.logout();
