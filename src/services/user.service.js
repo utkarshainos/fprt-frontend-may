@@ -20,7 +20,11 @@ service.login = (email, password) =>
           throw new Error("Something went wrong");
         }
       })
-      .then((data) => res(data))
+      .then((data) => {
+        //Save token to local storage
+        localStorage.setItem("token", data.token);
+        res(data);
+      })
       .catch((error) => rej(error));
   });
 
