@@ -6,6 +6,7 @@ import { Login } from "./components/login/login";
 import { Signup } from "./components/signup/signup";
 import { PublicImages } from "./components/public-images/public-images";
 import { PrivateImages } from "./components/private-images/private-images";
+import { ProtectedRoute } from "./components/ProtectedRoute/protected-route";
 
 function App() {
   return (
@@ -49,6 +50,10 @@ function App() {
             <Route path="/">
               <PublicImages />
             </Route>
+
+            {/* <ProtectedRoute path="/protected">
+              <PrivateImages />
+            </ProtectedRoute> */}
           </Switch>
         </div>
       </Router>
