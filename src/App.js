@@ -1,6 +1,6 @@
 import "./App.css";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { Login } from "./components/login/login";
 import { Signup } from "./components/signup/signup";
@@ -8,21 +8,28 @@ import { PublicImages } from "./components/public-images/public-images";
 import { PrivateImages } from "./components/private-images/private-images";
 import { ProtectedRoute } from "./components/ProtectedRoute/protected-route";
 import userService from "./services/user.service";
-import { useHistory } from "react-router-dom";
 
 import { useSelector, useDispatch } from "react-redux";
+import { isLoggedIn as _isLoggedIn } from "./store/actions/auth.actions";
+import { resetError } from "./store/actions/error.actions";
 
 function App() {
   const authReducer = useSelector((state) => state.authReducer);
+  const errorReducer = useSelector((state) => state.errorReducer);
   const isLoggedIn = authReducer.isLoggedIn;
-  const history = useHistory();
+  const error = errorReducer.error;
+  const dispatch = useDispatch();
 
   const logout = () => {
     userService.logout();
-    try {
-      history.push("/login");
-    } catch (e) {}
+    dispatch(_isLoggedIn(false));
   };
+
+  if (error) {
+    setTimeout(() => {
+      dispatch(resetError());
+    }, 3000);
+  }
 
   return (
     <div className="App">
@@ -61,9 +68,6 @@ function App() {
           </div>
 
           <Switch>
-            {/* <Route path="/my-images">
-              <PrivateImages />
-            </Route> */}
             <Route path="/login">
               <Login />
             </Route>
@@ -80,6 +84,11 @@ function App() {
           </Switch>
         </div>
       </Router>
+      {error ? (
+        <div className="alert-container">
+          <div className="alert">{error.message}</div>
+        </div>
+      ) : null}
     </div>
   );
 }

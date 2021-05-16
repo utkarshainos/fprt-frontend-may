@@ -4,16 +4,28 @@ import { Form, Button, Spinner } from "react-bootstrap";
 import userService from "../../services/user.service.js";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-
-import { isLoggedIn } from "../../store/actions/auth.actions";
+import { isLoggedIn as _isLoggedIn } from "../../store/actions/auth.actions";
+import { error } from "../../store/actions/error.actions";
 
 export const Auth = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isSending, setIsSending] = useState(false);
-  const history = useHistory();
+  let isSending = false;
 
+  const authReducer = useSelector((state) => state.authReducer);
+  const errorReducer = useSelector((state) => state.errorReducer);
+  const _error = errorReducer.error;
+
+  const isLoggedIn = authReducer.isLoggedIn;
+
+  const history = useHistory();
   const dispatch = useDispatch();
+
+  console.log(isLoggedIn);
+
+  if (!isLoggedIn) {
+    history.push("/login");
+  }
 
   const onFormSubmit = (e) => {
     e.preventDefault();
@@ -27,14 +39,12 @@ export const Auth = () => {
       .auth(email, password)
       .then((data) => {
         //Redirect to all images
-        setIsSending(false);
-
-        dispatch(isLoggedIn(true));
-
+        dispatch(_isLoggedIn(true));
         history.push("/");
       })
-      .catch((data) => {
-        setIsSending(false);
+      .catch((err) => {
+        console.log(err);
+        dispatch(error(err));
       });
   };
 

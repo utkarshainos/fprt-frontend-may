@@ -21,7 +21,14 @@ service.auth = (email, password) =>
         if (response.ok) {
           return response.json();
         } else {
-          throw new Error("Something went wrong");
+          console.log(response.status === 403);
+          switch (response.status) {
+            case 403:
+              throw new Error("Invalid Credentials");
+
+            default:
+              throw new Error("Somthing went wrong");
+          }
         }
       })
       .then((data) => {
@@ -34,7 +41,6 @@ service.auth = (email, password) =>
 
 service.isLoggedIn = () => {
   const token = localStorage.getItem("token");
-  console.log(token);
   return token !== null;
 };
 

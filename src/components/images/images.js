@@ -1,48 +1,63 @@
 import React, { useState, useEffect } from "react";
 import galleryService from "../../services/gallery.service";
 import "./images.css";
-import routeService from "../../services/route.service";
-import { zoomImg, resetZoomImg } from "../../store/actions/gallery.actions";
+import {
+  getImagesFailure,
+  getImagesSuccess,
+  resetGetImages,
+  zoomImg,
+} from "../../store/actions/gallery.actions";
 import { useDispatch, useSelector } from "react-redux";
 import { ImageDetails } from "../modal/image-details";
+import { Spinner } from "react-bootstrap";
+import { error } from "../../store/actions/error.actions";
 
 export const Images = () => {
-  let [images, setImages] = useState([]);
   const dispatch = useDispatch();
   const galleryReducer = useSelector((state) => state.galleryReducer);
 
-  console.log(galleryReducer.imgZoom);
+  const images = galleryReducer.getImagesSuccess;
 
   useEffect(() => {
+    dispatch(resetGetImages());
+
     //Check for url for correct servie
-    const service =
-      routeService.getLocation() === "my-images"
-        ? galleryService.getPrivateImages()
-        : galleryService.getPublicImages();
+    const service = galleryReducer.showPrivateImages
+      ? galleryService.getPrivateImages()
+      : galleryService.getPublicImages();
 
     //get images
     service
       .then((data) => {
-        console.log(data);
-        setImages(data);
+        // setImages(data);
+        dispatch(getImagesSuccess(data));
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((err) => {
+        dispatch(getImagesFailure(err));
+        dispatch(error(err));
       });
   }, []);
 
   return (
-    <div className="img-container">
-      <ImageDetails />
-      {images.map((img) => (
-        // eslint-disable-next-line jsx-a11y/alt-text
-        <img
-          key={img.id}
-          src="https://loremflickr.com/320/240"
-          className="img"
-          onClick={() => dispatch(zoomImg(img.url))}
-        />
-      ))}
+    <div className="d-flex h-100">
+      {!images ? (
+        <div className="spinner">
+          <Spinner animation="border" variant="primary" />
+        </div>
+      ) : (
+        <div className="img-container">
+          <ImageDetails />
+          {images?.map((img) => (
+            // eslint-disable-next-line jsx-a11y/alt-text
+            <img
+              key={img.id}
+              src="https://loremflickr.com/320/240"
+              className="img"
+              onClick={() => dispatch(zoomImg(img.url))}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 };
