@@ -1,9 +1,17 @@
 import React from "react";
-import { Route } from "react-router-dom";
+import { Route, Redirect } from "react-router-dom";
+import userService from "../../services/user.service";
 
-const ProtectedRoute = ({ component: Component, ...rest }) => {
+export const ProtectedRoute = ({ component: Component, ...rest }) => {
+  const isLoggedIn = userService.isLoggedIn();
+
   return (
-    <Route {...rest} render={(props) => <Component {...rest} {...props} />} />
+    <Route
+      {...rest}
+      render={(props) =>
+        isLoggedIn ? <Component {...props} /> : <Redirect to="/login" />
+      }
+    />
   );
 };
 

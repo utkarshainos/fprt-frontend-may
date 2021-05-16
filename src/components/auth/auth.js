@@ -1,13 +1,16 @@
 import React, { useState, useCallback } from "react";
 import "./auth.css";
-import { Form, Button } from "react-bootstrap";
+import { Form, Button, Spinner } from "react-bootstrap";
 import userService from "../../services/user.service.js";
 import routeService from "../../services/route.service";
+import { useHistory } from "react-router-dom";
 
 export const Auth = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isSending, setIsSending] = useState(false);
+
+  const history = useHistory();
 
   const onFormSubmit = (e) => {
     e.preventDefault();
@@ -17,26 +20,15 @@ export const Auth = () => {
       return;
     }
 
-    // const service =
-    // routeService.getLocation() === "login"
-    //   ?  userService
-    //   .login(email, password)
-    //       :  userService
-    //       .login(email, password)
-
     userService
-      .login(email, password)
+      .auth(email, password)
       .then((data) => {
-        <div>
-          {" "}
-          Toggle Toast <strong>Login successful</strong> Animation
-        </div>;
+        //Redirect to all images
+        history.push("/");
+        setIsSending(false);
       })
       .catch((data) => {
-        <div>
-          {" "}
-          Toggle Toast <strong>Login failed</strong> Animation
-        </div>;
+        setIsSending(false);
       });
   };
 
@@ -71,6 +63,8 @@ export const Auth = () => {
             Submit
           </Button>
         </Form>
+
+        <Spinner animation="border" variant="primary" hidden={!isSending} />
       </div>
     </div>
   );

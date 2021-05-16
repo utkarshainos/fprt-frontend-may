@@ -1,14 +1,34 @@
 import "./App.css";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { Login } from "./components/login/login";
 import { Signup } from "./components/signup/signup";
 import { PublicImages } from "./components/public-images/public-images";
 import { PrivateImages } from "./components/private-images/private-images";
 import { ProtectedRoute } from "./components/ProtectedRoute/protected-route";
+import userService from "./services/user.service";
+import { useHistory } from "react-router-dom";
 
 function App() {
+  var isLoggedIn = userService.isLoggedIn();
+  const history = useHistory();
+
+  useEffect(() => {
+    setTimeout(() => {
+      isLoggedIn = userService.isLoggedIn();
+
+      console.log(isLoggedIn);
+    }, 2000);
+  });
+
+  const logout = () => {
+    userService.logout();
+    try {
+      history.push("/login");
+    } catch (e) {}
+  };
+
   return (
     <div className="App">
       <Router>
@@ -18,27 +38,37 @@ function App() {
               All
             </Link>
 
-            <Link className="link" to="/my-images">
-              My Images
-            </Link>
+            {isLoggedIn ? (
+              <Link className="link" to="/my-images">
+                My_Images
+              </Link>
+            ) : null}
 
-            <Link className="link" to="/login">
-              Login
-            </Link>
+            <div className="spacer"></div>
 
-            <Link className="link" to="/signup">
-              Signup
-            </Link>
+            {!isLoggedIn ? (
+              <Link className="link" to="/login">
+                Login
+              </Link>
+            ) : null}
 
-            <Link className="link" to="/logout">
-              Logout
-            </Link>
+            {!isLoggedIn ? (
+              <Link className="link" to="/signup">
+                Signup
+              </Link>
+            ) : null}
+
+            {isLoggedIn ? (
+              <p className="link" onClick={logout}>
+                Logout
+              </p>
+            ) : null}
           </div>
 
           <Switch>
-            <Route path="/my-images">
+            {/* <Route path="/my-images">
               <PrivateImages />
-            </Route>
+            </Route> */}
             <Route path="/login">
               <Login />
             </Route>
@@ -47,13 +77,11 @@ function App() {
               <Signup />
             </Route>
 
+            <ProtectedRoute path="/my-images" component={PrivateImages} />
+
             <Route path="/">
               <PublicImages />
             </Route>
-
-            {/* <ProtectedRoute path="/protected">
-              <PrivateImages />
-            </ProtectedRoute> */}
           </Switch>
         </div>
       </Router>

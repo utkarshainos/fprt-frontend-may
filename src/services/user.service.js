@@ -28,4 +28,14 @@ service.auth = (email, password) =>
       .catch((error) => rej(error));
   });
 
+service.isLoggedIn = () => {
+  const token = localStorage.getItem("token");
+  console.log(token);
+  return token !== null;
+};
+
+service.logout = () => {
+  localStorage.clear();
+};
+
 export default service;
