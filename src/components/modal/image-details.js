@@ -1,22 +1,27 @@
 import React from "react";
 import "./image-details.css";
 import { Modal, Button } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
 
-export const ImageDetails = (img) => {
+export const ImageDetails = () => {
+  const [show, setShow] = useState(true);
+
+  const galleryReducer = useSelector((state) => state.galleryReducer);
+
+  // setShow(galleryReducer.imgZoom === "" ? false : true);
+  const handleClose = () => setShow(false);
+
   return (
-    <Modal.Dialog>
-      <Modal.Header closeButton>
-        <Modal.Title>Modal title</Modal.Title>
-      </Modal.Header>
+    <Modal show={show} size="lg" centered onHide={handleClose}>
+      <Modal.Header closeButton></Modal.Header>
 
-      <Modal.Body>
-        <img className="img" src={img} />
-      </Modal.Body>
+      {/* <Modal.Dialog>
 
-      <Modal.Footer>
-        <Button variant="secondary">Close</Button>
-        <Button variant="primary">Save changes</Button>
-      </Modal.Footer>
-    </Modal.Dialog>
+        <Modal.Body> */}
+      <img className="img-details" src="https://loremflickr.com/320/240" />
+      {/* </Modal.Body>
+      </Modal.Dialog> */}
+    </Modal>
   );
 };

@@ -4,7 +4,7 @@ const initialState = {
   isLoggedIn: userService.isLoggedIn(),
 };
 
-export const authReducer = (state = initialState, action) => {
+const authReducer = (state = initialState, action) => {
   switch (action.type) {
     case "Is logged in": {
       state.isLoggedIn = action.payload;
