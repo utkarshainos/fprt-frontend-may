@@ -1,5 +1,6 @@
 import React from "react";
+import { Images } from "../images/images";
 
 export const PrivateImages = () => {
-  return <h3>My Images</h3>;
+  return <Images />;
 };

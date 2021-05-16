@@ -2,6 +2,7 @@ import React, { useState, useCallback } from "react";
 import "./auth.css";
 import { Form, Button } from "react-bootstrap";
 import userService from "../../services/user.service.js";
+import routeService from "../../services/route.service";
 
 export const Auth = () => {
   const [email, setEmail] = useState("");
@@ -15,6 +16,13 @@ export const Auth = () => {
       console.log("invalid inputs");
       return;
     }
+
+    // const service =
+    // routeService.getLocation() === "login"
+    //   ?  userService
+    //   .login(email, password)
+    //       :  userService
+    //       .login(email, password)
 
     userService
       .login(email, password)

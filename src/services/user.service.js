@@ -1,7 +1,7 @@
 const service = {};
 
-//Login
-service.login = (email, password) =>
+//Auth
+service.auth = (email, password) =>
   new Promise((res, rej) => {
     const requestOptions = {
       method: "POST",
