@@ -9,19 +9,13 @@ import { PrivateImages } from "./components/private-images/private-images";
 import { ProtectedRoute } from "./components/ProtectedRoute/protected-route";
 import userService from "./services/user.service";
 import { useHistory } from "react-router-dom";
-import { auth$ } from "./services/observables";
+
+import { useSelector, useDispatch } from "react-redux";
 
 function App() {
-  let [isLoggedIn, setIsLoggedIn] = useState(userService.isLoggedIn());
+  const authReducer = useSelector((state) => state.authReducer);
+  const isLoggedIn = authReducer.isLoggedIn;
   const history = useHistory();
-
-  auth$.subscribe((auth) => {
-    setIsLoggedIn = auth;
-
-    console.log(auth);
-  });
-
-  useEffect(() => {});
 
   const logout = () => {
     userService.logout();

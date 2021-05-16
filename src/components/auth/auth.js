@@ -2,15 +2,18 @@ import React, { useState, useCallback } from "react";
 import "./auth.css";
 import { Form, Button, Spinner } from "react-bootstrap";
 import userService from "../../services/user.service.js";
-import routeService from "../../services/route.service";
 import { useHistory } from "react-router-dom";
-import { auth$ } from "../../services/observables";
+import { useSelector, useDispatch } from "react-redux";
+
+import { isLoggedIn } from "../../store/actions/auth.actions";
 
 export const Auth = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isSending, setIsSending] = useState(false);
   const history = useHistory();
+
+  const dispatch = useDispatch();
 
   const onFormSubmit = (e) => {
     e.preventDefault();
@@ -24,9 +27,11 @@ export const Auth = () => {
       .auth(email, password)
       .then((data) => {
         //Redirect to all images
-        auth$.next(true);
-        history.push("/");
         setIsSending(false);
+
+        dispatch(isLoggedIn(true));
+
+        history.push("/");
       })
       .catch((data) => {
         setIsSending(false);
