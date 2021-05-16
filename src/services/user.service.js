@@ -1,11 +1,7 @@
-import { Subject } from "rxjs";
-
 const service = {};
 
-const auth$ = new Subject();
-
 //Auth
-service.auth = (email, password) =>
+service.auth = (email, password, authString) =>
   new Promise((res, rej) => {
     const requestOptions = {
       method: "POST",
@@ -16,15 +12,20 @@ service.auth = (email, password) =>
       }),
     };
 
-    fetch("https://fprt-may-backend.herokuapp.com/user/login", requestOptions)
+    fetch(
+      `https://fprt-may-backend.herokuapp.com/user/${authString}`,
+      requestOptions
+    )
       .then((response) => {
         if (response.ok) {
           return response.json();
         } else {
-          console.log(response.status === 403);
           switch (response.status) {
             case 403:
               throw new Error("Invalid Credentials");
+
+            case 409:
+              throw new Error("Email already exists");
 
             default:
               throw new Error("Somthing went wrong");

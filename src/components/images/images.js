@@ -58,6 +58,12 @@ export const Images = () => {
           ))}
         </div>
       )}
+
+      {images?.length === 0 ? (
+        <div className="not-found">
+          <h3>No images found</h3>
+        </div>
+      ) : null}
     </div>
   );
 };

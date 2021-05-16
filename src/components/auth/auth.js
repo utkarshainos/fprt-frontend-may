@@ -2,6 +2,7 @@ import React, { useState, useCallback } from "react";
 import "./auth.css";
 import { Form, Button, Spinner } from "react-bootstrap";
 import userService from "../../services/user.service.js";
+import routeService from "../../services/route.service";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { isLoggedIn as _isLoggedIn } from "../../store/actions/auth.actions";
@@ -13,18 +14,16 @@ export const Auth = () => {
   let [sending, setSending] = useState(false);
 
   const authReducer = useSelector((state) => state.authReducer);
-  const errorReducer = useSelector((state) => state.errorReducer);
-  const _error = errorReducer.error;
-
   const isLoggedIn = authReducer.isLoggedIn;
 
   const history = useHistory();
   const dispatch = useDispatch();
 
-  console.log(isLoggedIn);
-
   if (!isLoggedIn) {
-    history.push("/login");
+    const route = routeService.getLocation();
+
+    if (route === "login" || route === "signup") history.push(`/${route}`);
+    else history.push(`/login`);
   }
 
   const onFormSubmit = (e) => {
@@ -38,7 +37,7 @@ export const Auth = () => {
     setSending(true);
 
     userService
-      .auth(email, password)
+      .auth(email, password, routeService.getLocation())
       .then((data) => {
         //Redirect to all images
         setSending(false);
