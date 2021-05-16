@@ -4,16 +4,17 @@ const initialState = {
 
 const galleryReducer = (state = initialState, action) => {
   switch (action.type) {
-    case "Zoom img": {
-      state.imgZoom = action.payload;
-      return state;
-    }
+    case "Zoom img":
+      return {
+        ...state,
+        imgZoom: action.payload,
+      };
 
-    case "Zoom img reset": {
-      state.imgZoom = "";
-
-      return state;
-    }
+    case "Zoom img reset":
+      return {
+        ...state,
+        imgZoom: "",
+      };
 
     default:
       return state;
