@@ -51,7 +51,7 @@ export const Images = () => {
             // eslint-disable-next-line jsx-a11y/alt-text
             <img
               key={img.id}
-              src="https://loremflickr.com/320/240"
+              src={img.url}
               className="img"
               onClick={() => dispatch(zoomImg(img.url))}
             />

@@ -13,7 +13,7 @@ export const ImageDetails = () => {
   return (
     <Modal show={show} size="lg" centered onHide={handleClose}>
       <Modal.Header closeButton></Modal.Header>
-      <img className="img-details" src="https://loremflickr.com/320/240" />
+      <img className="img-details" src={galleryReducer.imgZoom} />
     </Modal>
   );
 };

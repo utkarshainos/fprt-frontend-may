@@ -1,7 +1,13 @@
 import "./App.css";
 
 import React from "react";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  NavLink,
+} from "react-router-dom";
 import { Login } from "./components/login/login";
 import { Signup } from "./components/signup/signup";
 import { PublicImages } from "./components/public-images/public-images";
@@ -36,28 +42,41 @@ function App() {
       <Router>
         <div>
           <div className="header">
-            <Link className="link" to="/">
+            <NavLink
+              exact={true}
+              activeClassName="is-active"
+              className="link"
+              to="/"
+            >
               All
-            </Link>
+            </NavLink>
 
             {isLoggedIn ? (
-              <Link className="link" to="/my-images">
+              <NavLink
+                activeClassName="is-active"
+                className="link"
+                to="/my-images"
+              >
                 My_Images
-              </Link>
+              </NavLink>
             ) : null}
 
             <div className="spacer"></div>
 
             {!isLoggedIn ? (
-              <Link className="link" to="/login">
+              <NavLink activeClassName="is-active" className="link" to="/login">
                 Login
-              </Link>
+              </NavLink>
             ) : null}
 
             {!isLoggedIn ? (
-              <Link className="link" to="/signup">
+              <NavLink
+                activeClassName="is-active"
+                className="link"
+                to="/signup"
+              >
                 Signup
-              </Link>
+              </NavLink>
             ) : null}
 
             {isLoggedIn ? (

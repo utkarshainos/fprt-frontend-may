@@ -30,7 +30,8 @@ export const Auth = () => {
     e.preventDefault();
 
     if (email.trim() === "" || password.trim() === "") {
-      console.log("invalid inputs");
+      dispatch(error({ message: "Invalid Inputs" }));
+
       return;
     }
 

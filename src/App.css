@@ -43,7 +43,7 @@
   position: sticky;
   top: 0;
   height: 80px;
-  background-color: teal;
+  background-color: #190e2e;
   padding: 10px;
 }
 
@@ -82,4 +82,8 @@
   padding: 10px;
   position: fixed;
   bottom: 0;
+}
+
+.is-active {
+  color: blueviolet;
 }
